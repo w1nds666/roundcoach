@@ -1,0 +1,120 @@
+{
+  "version": "1.0",
+  "note": "坐标换算系数来源: 2mlml/cs2-radar-images（CS2 游戏内提取）",
+  "formula": "radar_x=(world_x-pos_x)/scale; radar_y=(pos_y-world_y)/scale",
+  "maps": {
+    "de_ancient": {
+      "pos_x": -2953.0,
+      "pos_y": 2164.0,
+      "scale": 5.0
+    },
+    "de_anubis": {
+      "pos_x": -2796.0,
+      "pos_y": 3328.0,
+      "scale": 5.22
+    },
+    "de_basalt": {
+      "pos_x": -2345.6,
+      "pos_y": 2391.8,
+      "scale": 4.37
+    },
+    "de_brewery": {
+      "pos_x": -4122.4,
+      "pos_y": 4394.4,
+      "scale": 2.1820312
+    },
+    "de_cache": {
+      "pos_x": -2000.0,
+      "pos_y": 3250.0,
+      "scale": 5.5
+    },
+    "de_dogtown": {
+      "pos_x": -1741.0228,
+      "pos_y": 3295.1,
+      "scale": 2.0323243
+    },
+    "de_dust2": {
+      "pos_x": -2476.0,
+      "pos_y": 3239.0,
+      "scale": 4.4
+    },
+    "de_edin": {
+      "pos_x": -383.30038,
+      "pos_y": 4420.2134,
+      "scale": 4.803717
+    },
+    "de_grail": {
+      "pos_x": -4395.903,
+      "pos_y": 4203.903,
+      "scale": 2.1756864
+    },
+    "de_inferno": {
+      "pos_x": -2087.0,
+      "pos_y": 3870.0,
+      "scale": 4.9
+    },
+    "de_jura": {
+      "pos_x": -2126.9092,
+      "pos_y": 2389.8,
+      "scale": 2.504188
+    },
+    "de_mirage": {
+      "pos_x": -3230.0,
+      "pos_y": 1713.0,
+      "scale": 5.0
+    },
+    "de_nuke": {
+      "pos_x": -3453.0,
+      "pos_y": 2887.0,
+      "scale": 7.0,
+      "lower_altitude_below": -495.0
+    },
+    "de_overpass": {
+      "pos_x": -4831.0,
+      "pos_y": 1781.0,
+      "scale": 5.2
+    },
+    "de_palais": {
+      "pos_x": -1353.2374,
+      "pos_y": 2044.8105,
+      "scale": 2.8003397
+    },
+    "de_train": {
+      "pos_x": -2308.0,
+      "pos_y": 2078.0,
+      "scale": 4.082077,
+      "lower_altitude_below": -50.0
+    },
+    "de_vertigo": {
+      "pos_x": -3168.0,
+      "pos_y": 1762.0,
+      "scale": 4.0,
+      "lower_altitude_below": 11700.0
+    },
+    "de_whistle": {
+      "pos_x": -1825.6,
+      "pos_y": 1104.82,
+      "scale": 2.8
+    }
+  },
+  "radar_png_sources": {
+    "de_ancient": "https://github.com/2mlml/cs2-radar-images/raw/main/de_ancient.png",
+    "de_anubis": "https://github.com/2mlml/cs2-radar-images/raw/main/de_anubis.png",
+    "de_basalt": "https://github.com/2mlml/cs2-radar-images/raw/main/de_basalt.png",
+    "de_brewery": "https://github.com/2mlml/cs2-radar-images/raw/main/de_brewery.png",
+    "de_cache": "CS2 installed pak01_dir.vpk:panorama/images/overheadmaps/de_cache_radar_tga.vtex_c",
+    "de_dogtown": "https://github.com/2mlml/cs2-radar-images/raw/main/de_dogtown.png",
+    "de_dust2": "https://github.com/2mlml/cs2-radar-images/raw/main/de_dust2.png",
+    "de_edin": "https://github.com/2mlml/cs2-radar-images/raw/main/de_edin.png",
+    "de_grail": "https://github.com/2mlml/cs2-radar-images/raw/main/de_grail.png",
+    "de_inferno": "https://github.com/2mlml/cs2-radar-images/raw/main/de_inferno.png",
+    "de_jura": "https://github.com/2mlml/cs2-radar-images/raw/main/de_jura.png",
+    "de_mirage": "https://github.com/2mlml/cs2-radar-images/raw/main/de_mirage.png",
+    "de_nuke": "CS2 installed pak01_dir.vpk:panorama/images/overheadmaps/de_nuke_radar_psd.vtex_c",
+    "de_overpass": "CS2 installed pak01_dir.vpk:panorama/images/overheadmaps/de_overpass_radar_psd.vtex_c",
+    "de_palais": "https://github.com/2mlml/cs2-radar-images/raw/main/de_palais.png",
+    "de_train": "CS2 installed pak01_dir.vpk:panorama/images/overheadmaps/de_train_radar_psd.vtex_c",
+    "de_vertigo": "CS2 installed pak01_dir.vpk:panorama/images/overheadmaps/de_vertigo_radar_psd.vtex_c",
+    "de_whistle": "https://github.com/2mlml/cs2-radar-images/raw/main/de_whistle.png"
+  }
+}

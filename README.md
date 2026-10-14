@@ -98,4 +98,3 @@ npm run dev
 
 原创程序代码以 [MIT License](LICENSE) 发布。Counter-Strike、Steam、地图、雷达图、游戏数据及其他第三方内容不在该许可证授权范围内，其权利归各自权利人所有。
 
-

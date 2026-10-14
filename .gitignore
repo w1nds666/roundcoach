@@ -1,0 +1,49 @@
+# 依赖与构建产物
+node_modules/
+frontend/dist/
+.npm-cache/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# 环境与密钥
+.env
+
+# 负载/soak 运行时状态（含 synthetic JWT 与 share token，绝不入库）
+.runtime/
+scripts/load_state.json
+scripts/load_out/
+scripts/state/
+
+# E2E 重生成的视觉/性能证据（每次运行会变；可能含 UI 上的分享 token/标识，不入库）
+frontend/tests/e2e/screenshots/
+backend/tests/output/
+docs/phase6r8-perf.json
+docs/phase6r9-perf.json
+docs/phase6r13-perf.json
+
+# 测试 demo 文件
+*.dem
+
+# 本机 CS2/Valve 游戏资产与派生地图数据不得提交公开仓库
+backend/config/radars/
+backend/config/navmesh/
+backend/config/regions/
+frontend/public/maps/
+
+# 本地数据库、备份与证书
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.pem
+*.key
+*.p12
+*.pfx
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

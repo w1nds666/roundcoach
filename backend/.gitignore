@@ -1,0 +1,12 @@
+# 忽略本地虚拟环境与缓存
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# 忽略本地 env 文件（生产用环境变量注入）
+.env
+
+# 测试 demo 文件较大，不入库
+*.dem

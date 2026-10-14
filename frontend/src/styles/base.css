@@ -1,0 +1,610 @@
+/**
+ * 6R11 设计系统（赛后复盘室 / 编辑部式电竞数据产品）
+ * 单一可复用文件：颜色语义、排版、4/8px 间距、容器、圆角、边框、阴影、动效、状态。
+ * 保留既有类名契约（card/btn/input/pill/page-wrap/locked-box/tabs 等），组件只需继承即受益。
+ */
+:root {
+  /* 背景层级（深色但不霓虹，偏中性近黑） */
+  --bg-base: #0b0e12;
+  --bg-panel: #11151b;
+  --bg-elevated: #171d25;
+  --bg-hover: #1d2530;
+  --bg-inset: #0d1117;
+  --border: #232a34;
+  --border-strong: #333d4a;
+
+  /* 文本层级 */
+  --text-primary: #edf1f6;
+  --text-secondary: #98a4b3;
+  --text-muted: #5f6d7e;
+  --text-faint: #46535f;
+
+  /* 品牌/强调：温暖琥珀，只做关键动作 */
+  --accent: #e6a54a;
+  --accent-strong: #f0b45e;
+  --accent-soft: rgba(230, 165, 74, 0.12);
+  --accent-ink: #17110a;          /* 琥珀上的深色文字 */
+
+  /* 冷灰蓝承载结构（队伍/信息） */
+  --link: #7fb0e8;
+  --info: #5b9dd9;
+  --info-soft: rgba(91, 157, 217, 0.14);
+
+  /* 状态色（语义唯一，绝不共用） */
+  --ok: #57b877;
+  --ok-soft: rgba(87, 184, 119, 0.14);
+  --warn: #cf9c39;
+  --warn-soft: rgba(207, 156, 57, 0.14);
+  --err: #e5645d;
+  --err-soft: rgba(229, 100, 93, 0.14);
+
+  /* 间距（4 / 8px 梯度） */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-7: 32px; --sp-8: 40px;
+
+  /* 尺寸 */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --nav-h: 52px;
+  --content-max: 1040px;
+
+  /* 阴影（浅而克制，仅浮层） */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 24px -8px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 18px 50px -12px rgba(0, 0, 0, 0.7);
+
+  /* 动效（仅空间/状态变化；6R21 统一 motion tokens：150 / 260 / 400ms，服务状态而非装饰） */
+  --dur-fast: 150ms;
+  --dur-mid: 260ms;
+  --dur: 200ms;
+  --dur-slow: 400ms;
+  --motion-fast: var(--dur-fast);
+  --motion: var(--dur-mid);
+  --motion-slow: var(--dur-slow);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 字号阶梯（含行高） */
+  --f-display: 28px;  --lh-display: 1.12;
+  --f-h1: 22px;       --lh-h1: 1.2;
+  --f-h2: 17px;       --lh-h2: 1.35;
+  --f-title: 19px;    --lh-title: 1.3;
+  --f-body: 14px;     --lh-body: 1.7;
+  --f-sub: 13px;      --lh-sub: 1.6;
+  --f-label: 12px;    --lh-label: 1.45;
+  --f-mono: 12px;
+
+  /* ===== 6R17 DS 2.0 补充（版本化：v2.0）===== */
+  /* 版式：数字档 + 更大 display 档 */
+  --f-display-lg: 34px;  --lh-display-lg: 1.08;
+  --f-num: 18px;         --lh-num: 1.1;
+  /* 间距：延伸到 48/64 */
+  --sp-9: 48px;          --sp-10: 64px;
+  /* 层叠（浮层/弹窗/导航） */
+  --z-nav: 40; --z-overlay: 80; --z-modal: 90; --z-toast: 100;
+  /* 焦点环 */
+  --focus-ring: 2px solid var(--accent);
+  /* 动效：补一档慢速（仅状态/空间变化；6R21 统一到 150/260/400 刻度） */
+  --dur-slow: 400ms;
+  /* 数据系列（图表/指标语义唯一，不与强调/状态共用） */
+  --data-1: var(--accent);           /* 主数据 */
+  --data-2: var(--info);             /* CT/信息系 */
+  --data-3: #6f8bb8;                 /* 冷灰蓝次级 */
+  --data-4: var(--warn);             /* T/暖系 */
+  --data-ct: var(--info);            /* CT 阵营 */
+  --data-t: var(--warn);             /* T 阵营 */
+  --data-neutral: var(--text-muted);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { font-size: 16px; -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: var(--f-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 数字统一 tabular（对齐数据表格） */
+.num, table td, .stat-num, .metric-num { font-variant-numeric: tabular-nums; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { opacity: 0.85; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================= 通用容器 ============================= */
+.page-wrap { max-width: var(--content-max); margin: 0 auto; padding: 28px 24px 72px; width: 100%; }
+
+/* 卡片：仅独立交互模块使用；同屏不要铺满同尺寸 */
+.card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+  box-shadow: none;   /* 扁平信息层，不用卡片浮影 */
+}
+
+/* ============================= 排版工具 ============================= */
+.page-title { font-size: var(--f-title); font-weight: 700; letter-spacing: .3px; line-height: var(--lh-title); }
+.page-sub { color: var(--text-secondary); font-size: var(--f-sub); line-height: var(--lh-sub); margin-top: 5px; }
+
+/* 截断保护：长玩家名 / 长文件名 不横向溢出 */
+.ellipsis { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0; }
+.clamp-2 {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; text-overflow: ellipsis; min-width: 0;
+}
+
+/* 数字/指标原语 */
+.metric { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.metric-num { font-size: 22px; font-weight: 700; line-height: 1.1; }
+.metric-lbl { font-size: var(--f-label); color: var(--text-muted); line-height: var(--lh-label); }
+.metric-sec .metric-num { font-size: 17px; color: var(--text-secondary); }  /* 次级指标弱化 */
+
+/* ============================= 状态标签 pill ============================= */
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 2px 9px; border-radius: var(--radius-pill);
+  font-size: 11.5px; font-weight: 600; line-height: 19px;
+  white-space: nowrap;            /* badge 绝不逐字换行 */
+  color: var(--text-secondary); background: rgba(152, 164, 179, 0.1);
+}
+.pill-ok    { color: var(--ok);   background: var(--ok-soft); }
+.pill-warn  { color: var(--warn); background: var(--warn-soft); }
+.pill-err   { color: var(--err);  background: var(--err-soft); }
+.pill-info  { color: var(--info); background: var(--info-soft); }
+.pill-muted { color: var(--text-secondary); background: rgba(152, 164, 179, 0.1); }
+
+/* 队伍徽标（紧凑、单行、不碎裂） */
+.tag { display: inline-flex; align-items: center; white-space: nowrap; padding: 1px 8px; border-radius: 4px; font-size: 11.5px; font-weight: 700; }
+.tag-ct { background: var(--info-soft); color: var(--info); }
+.tag-t  { background: var(--warn-soft); color: var(--warn); }
+
+/* ============================= 按钮 ============================= */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background: var(--bg-elevated); color: var(--text-primary);
+  padding: 8px 15px; font-size: var(--f-body); font-weight: 600; cursor: pointer;
+  min-height: 38px; white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
+}
+.btn:hover { border-color: var(--accent); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { filter: brightness(1.06); }
+.btn-secondary { background: var(--bg-elevated); border-color: var(--border-strong); }
+.btn-ghost { background: transparent; border-color: transparent; color: var(--text-secondary); font-weight: 500; }
+.btn-ghost:hover { color: var(--text-primary); border-color: transparent; }
+
+/* 分段控件（seg-btn） */
+.seg-btn {
+  border: 1px solid var(--border-strong); background: var(--bg-elevated); color: var(--text-secondary);
+  padding: 6px 13px; border-radius: var(--radius-sm); font-size: 13px; cursor: pointer; font-weight: 600;
+  min-height: 36px; white-space: nowrap;
+}
+.seg-btn.on { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.seg-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ============================= 输入 ============================= */
+.input {
+  width: 100%; padding: 9px 12px;
+  background: var(--bg-base); color: var(--text-primary);
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  font-size: var(--f-body); outline: none;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+.input:focus { border-color: var(--accent); }
+.input:disabled { opacity: 0.5; cursor: not-allowed; }
+.input::placeholder { color: var(--text-muted); }
+
+/* 表单错误 / 提示 */
+.field-error { color: var(--err); font-size: var(--f-label); margin-top: 4px; }
+.form-error-box {
+  background: var(--err-soft); color: var(--err);
+  border: 1px solid color-mix(in srgb, var(--err) 30%, transparent);
+  border-radius: var(--radius-sm); padding: 10px 14px; font-size: var(--f-sub);
+}
+
+/* ============================= 表格（档案） ============================= */
+.tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.tbl th { text-align: left; color: var(--text-muted); font-weight: 600; font-size: 12px; padding: 10px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.tbl td { padding: 8px 10px; border-bottom: 1px solid rgba(35, 45, 61, 0.5); white-space: nowrap; }
+.tbl tr:last-child td { border-bottom: none; }
+
+/* ============================= 空 / 加载 / 错误（全局状态） ============================= */
+.empty-state { text-align: center; padding: var(--sp-8) var(--sp-6); }
+.loading-row { text-align: center; color: var(--text-muted); padding: var(--sp-7) var(--sp-5); font-size: var(--f-sub); }
+.error-state {
+  background: var(--err-soft); color: var(--err);
+  border: 1px solid color-mix(in srgb, var(--err) 30%, transparent);
+  border-radius: var(--radius-sm); padding: 12px 16px; font-size: var(--f-sub);
+}
+
+/* ============================= 辅助 ============================= */
+.mt { margin-top: var(--sp-4); }
+.mt16 { margin-top: var(--sp-4); }
+.muted { color: var(--text-muted); }
+.sub-h { font-size: var(--f-sub); font-weight: 700; color: var(--text-secondary); letter-spacing: .3px; }
+
+/* ============================= 响应式 ============================= */
+@media (max-width: 720px) {
+  .page-wrap { padding: 20px 14px 56px; }
+  .page-title { font-size: 17px; }
+  /* 触控目标 >= 44px */
+  .btn, .seg-btn { min-height: 44px; }
+  .input, select.input { min-height: 44px; }
+}
+
+/* ============================================================
+   6R17 DS 2.0 —— 编辑部 / 复盘室 原语（新增，组件/页继承即受益）
+   方向：有人味的「赛后复盘室 + 电竞数据编辑部」。参考 Leetify/CS Demo Manager
+   的信息组织、聚宽/Active Theory 的节奏，但不照抄品牌/布局/文案/资产。
+   禁止：霓虹渐变、玻璃拟态、同尺寸卡片墙、胶囊滥用、装饰性图标堆砌、
+   机器味大标题、重复解释。以「结论 → 证据 → 回放动作」为主线。
+   ============================================================ */
+
+/* 统一页面页头：eyebrow + title + sub + 右侧动作（全站一致） */
+.page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.page-head .page-title { margin: 0; }
+.eyebrow { font-size: var(--f-label); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+
+/* 结论条（首屏主力）：数字大屏 + 一句话结论 + 回放动作 */
+.conclusion-strip {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center;
+  padding: 20px 22px; border: 1px solid var(--border); border-left: 3px solid var(--accent);
+  background: var(--bg-panel); border-radius: var(--radius);
+}
+.conclusion-strip .cs-score { display: flex; align-items: baseline; gap: 8px; }
+.cs-num { font-size: var(--f-display-lg); font-weight: 800; line-height: var(--lh-display-lg); font-variant-numeric: tabular-nums; }
+.cs-colon { color: var(--text-muted); font-size: 22px; }
+.cs-body .cs-title { font-size: var(--f-title); font-weight: 700; }
+.cs-body .cs-desc { color: var(--text-secondary); font-size: var(--f-sub); margin-top: 4px; }
+.cs-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* 数据指标格（横向可排布；对比表格/带状；不全是同尺寸卡） */
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px 20px; }
+.metric-cell { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.metric-cell .mc-num { font-size: 24px; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.metric-cell .mc-lbl { font-size: var(--f-label); color: var(--text-muted); }
+.metric-cell.sub .mc-num { font-size: 17px; color: var(--text-secondary); }
+
+/* 分区标题（一句话，非机器味）+ 分区节奏 */
+.section-head { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; }
+.section-head h2 { font-size: var(--f-h2); font-weight: 700; color: var(--text-primary); margin: 0; }
+.section-head .sh-note { font-size: var(--f-label); color: var(--text-muted); }
+.section { margin-top: 26px; }
+.section-divider { border: none; border-top: 1px solid var(--border); margin: 26px 0 0; }
+
+/* 地图优先：主地图占主体；控制区少而清楚，说明收进折叠/诊断 */
+.map-primary { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.map-primary .map-stage { min-height: 380px; position: relative; }
+
+/* 反模板工具类（组件自防御；真正约束由 6R17 strict E2E 断言） */
+.no-neon, .no-neon * { background-image: none !important; text-shadow: none !important; box-shadow: none !important; }
+.glassy, .neon { display: none; }
+
+/* 通用可折叠（说明/口径收进折叠，主界面不被说明墙挤压） */
+.fold summary { cursor: pointer; color: var(--text-secondary); font-size: var(--f-label); font-weight: 600; padding: 6px 0; }
+.fold[open] summary { color: var(--accent); }
+.fold { border-top: 1px dashed var(--border); margin-top: 12px; padding-top: 6px; color: var(--text-secondary); font-size: var(--f-sub); }
+
+/* 数据系列工具（图表着色，语义唯一） */
+.ds-ct { color: var(--data-ct); } .ds-t { color: var(--data-t); }
+.ds-1 { color: var(--data-1); } .ds-2 { color: var(--data-2); }
+.ds-3 { color: var(--data-3); } .ds-4 { color: var(--data-4); }
+
+/* ============================================================
+   6R21F 全站视觉基础 —— 营销/落地页层（复用主系统语义，不新增配色）
+   方向：编辑部式战术分析桌。暗色中性场，琥珀=关键动作(T/结论)，冷蓝=CT/信息，
+   争夺=独立紫(虚线)。禁止霓虹渐变/玻璃堆砌/同尺寸卡片墙/廉价整片色块。
+   本层只补"容器/表面/排版档/影子"等落地页节奏 tokens，配色全部引用主系统。
+   ============================================================ */
+:root {
+  /* 落地页容器与表面 */
+  --mark-container: 1400px;
+  --mark-surface: #0b0f14;        /* 比 bg-base 略冷，编辑部底 */
+  --mark-surface-2: #0d1218;      /* 舞台/浮层 */
+  --mark-surface-3: #10161d;      /* 更亮一级 */
+  --mark-rule: rgba(51, 61, 74, .62);
+  --mark-rule-strong: rgba(66, 78, 93, .92);
+  /* 影子：舞台/浮层用；信息卡扁平不加影 */
+  --mark-shadow: 0 26px 96px rgba(0, 0, 0, .52);
+  --mark-shadow-soft: 0 12px 40px rgba(0, 0, 0, .34);
+  /* 排版档（落地页用，正文仍走 --f-body） */
+  --mark-display: clamp(44px, 4.4vw, 66px);
+  --mark-display-lh: 1.04;
+  --mark-title: clamp(26px, 2.9vw, 44px);
+  --mark-title-lh: 1.16;
+  --mark-num: clamp(22px, 2.4vw, 34px);
+  /* 网格/战术底纹（克制的结构感） */
+  --mark-grid: rgba(255, 255, 255, .022);
+}
+
+/* 落地页/营销正文容器 */
+.mark-wrap { max-width: var(--mark-container); margin: 0 auto; }
+
+/* ============================================================
+   6R21F-F2 统一应用壳层（Dashboard/Upload/Login 共用）——
+   复用主系统语义（冷黑场/琥珀=关键动作/冷蓝=CT 与信息），不新增配色。
+   方向：作战记录台 / 可信数据入口 / 可信身份门。克制、信息密度优先。
+   ============================================================ */
+:root {
+  /* 应用壳层尺寸 */
+  --app-topbar-h: 58px;
+  --app-side-w: 224px;
+  --app-content-max: 1080px;
+  --app-radius: var(--radius);
+  /* 壳层表面（比营销层更收敛，编辑部作业面） */
+  --app-surface: #0e1218;
+  --app-side-bg: #0b0f14;
+  --app-topbar-bg: rgba(14, 18, 24, 0.94);
+  --app-rule: var(--border);
+  /* 身份/权益徽标语义（tier） */
+  --tier-free: var(--text-secondary);
+  --tier-pro: var(--info);
+  --tier-max: var(--accent);
+}
+
+/* 壳层根：应用级布局（顶栏 + 侧栏 + 内容 + 底部） */
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; background: var(--bg-base); }
+.app-body { flex: 1; display: flex; min-height: 0; }
+
+/* 顶栏 */
+.app-topbar {
+  height: var(--app-topbar-h);
+  display: flex; align-items: center; gap: 18px;
+  padding: 0 22px;
+  background: var(--app-topbar-bg);
+  border-bottom: 1px solid var(--app-rule);
+  position: relative;   /* 不吸顶，避免长页遮挡（6R5A 约定） */
+}
+.app-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 16px; color: var(--text-primary); letter-spacing: .2px; white-space: nowrap; }
+.app-brand .brand-dot { width: 11px; height: 11px; border-radius: 3px; background: var(--accent); transform: rotate(45deg); flex: 0 0 auto; }
+.app-crumb { min-width: 0; font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 7px; white-space: nowrap; overflow: hidden; }
+.app-crumb .sep { color: var(--text-faint); }
+.app-crumb .cur { color: var(--text-primary); font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+.app-topbar .spacer { flex: 1; }
+
+/* 顶栏身份（头像/昵称/档位/退出） */
+.app-user { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.app-avatar {
+  width: 30px; height: 30px; border-radius: 7px; flex: 0 0 auto;
+  background: var(--accent-soft); color: var(--accent);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800;
+}
+.app-uname { font-size: 14px; font-weight: 600; color: var(--text-primary); max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 档位徽标（语义唯一：free 灰/pro 蓝/max 琥珀） */
+.tier-badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; line-height: 18px; white-space: nowrap; }
+.tier-free { color: var(--tier-free); background: rgba(152, 164, 179, 0.12); }
+.tier-pro  { color: var(--tier-pro);  background: var(--info-soft); }
+.tier-max  { color: var(--tier-max);  background: var(--accent-soft); }
+
+/* 侧栏（桌面） */
+.app-side {
+  width: var(--app-side-w); flex: 0 0 var(--app-side-w);
+  background: var(--app-side-bg);
+  border-right: 1px solid var(--app-rule);
+  display: flex; flex-direction: column; padding: 16px 12px;
+}
+.app-nav-label { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-faint); padding: 0 8px 8px; }
+.app-nav { display: flex; flex-direction: column; gap: 3px; }
+.app-nav-link {
+  display: flex; align-items: center; gap: 11px;
+  padding: 9px 11px; border-radius: var(--radius-sm);
+  color: var(--text-secondary); font-size: 14px; font-weight: 600; min-height: 38px;
+}
+.app-nav-link:hover { color: var(--text-primary); background: var(--bg-elevated); }
+.app-nav-link.active { color: var(--accent); background: var(--accent-soft); }
+.app-nav-ic { width: 20px; height: 20px; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; opacity: .9; }
+.app-nav-ic svg { width: 18px; height: 18px; }
+
+/* 侧栏身份/权益摘要（底部） */
+.app-side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding: 12px 6px 2px; border-top: 1px solid var(--app-rule); }
+.identity-box { display: flex; flex-direction: column; gap: 6px; padding: 10px 11px; border: 1px solid var(--app-rule); border-radius: var(--radius-sm); background: var(--app-surface); }
+.identity-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+.identity-row .lb { font-size: 12px; color: var(--text-muted); }
+.identity-row .val { font-size: 12px; color: var(--text-secondary); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.identity-hint { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+
+/* 主内容区 */
+.app-content { flex: 1; min-width: 0; }
+
+/* 应用页脚 */
+.app-foot { padding: 16px; text-align: center; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border); }
+
+/* 移动端导航条（不遮挡正文：仅 flow 定位，非 fixed 浮层） */
+.app-nav-strip { display: none; }
+
+/* ============================================================
+   6R21F-F3 战术工作台 —— Report 概览/个人/团队 三视图共用框架
+   设计判断：概览=「裁决摘要」、个人=「可追溯训练单」、团队=「战术时间线」。
+   三视图是一套工作台（.wb-*），不是三张互不相关的卡片页。
+   沿用主系统语义（冷黑场/琥珀=关键动作/T/结论、冷蓝=CT/信息），不新增配色。
+   只补容器/段落节奏/证据密度原语；核心画布仍是 SVG/Canvas 高性能路线。
+   ============================================================ */
+:root {
+  /* 工作台页面段宽（比内容区略宽，给地图/回放留呼吸） */
+  --wb-max: 1160px;
+  /* 证据/段落内边距与节奏 */
+  --wb-section-gap: 18px;
+  --wb-card-pad: 16px 20px;
+  /* 结论条左侧信号色（沿用语义，不新增） */
+  --wb-verdict-accent: var(--accent);
+  --wb-side-ct: var(--info);
+  --wb-side-t: var(--warn);
+}
+
+/* 工作台上下文条（顶部比赛上下文：地图/比分/队伍/回合/时长/身份/权益） */
+.wb-context {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px 20px;
+  align-items: center;
+  padding: 16px 20px;
+  margin-bottom: var(--wb-section-gap);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.wb-context .wb-main { min-width: 0; }
+.wb-context .wb-map { display: flex; align-items: baseline; gap: 8px; }
+.wb-context .wb-map .map-name { margin: 0; }
+.wb-context .wb-score-row { display: flex; align-items: center; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+.wb-context .wb-score { font-size: var(--f-display-lg); font-weight: 800; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+.wb-context .wb-side { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; min-width: 0; }
+.wb-context .wb-side .wb-team-tag { width: 8px; height: 8px; border-radius: 2px; flex: 0 0 auto; }
+.wb-side.ct .wb-team-tag { background: var(--wb-side-ct); }
+.wb-side.t .wb-team-tag { background: var(--wb-side-t); }
+.wb-context .wb-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; color: var(--text-secondary); font-size: 13px; margin-top: 8px; }
+.wb-context .wb-meta .dot { color: var(--text-muted); }
+.wb-context .wb-status { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex-direction: column; align-items: flex-end; }
+.wb-context .wb-side-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+/* 工作台一级 tab（沿用 .tab 以兼容既有 E2E；新增 .wb-tabs 容器节奏） */
+.wb-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: var(--wb-section-gap); overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+.wb-tabs .tab { border: none; background: transparent; color: var(--text-secondary); padding: 11px 18px; font-size: 14px; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }
+.wb-tabs .tab:hover { color: var(--text-primary); }
+.wb-tabs .tab.on { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* 工作台「分区」节奏：数字主尺度 + 细分隔，不铺满同权重卡片 */
+.wb-section { margin-top: var(--wb-section-gap); }
+.wb-section-head { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; }
+.wb-section-head h2 { font-size: var(--f-h2); font-weight: 700; color: var(--text-primary); margin: 0; }
+.wb-section-head .sh-note { font-size: var(--f-label); color: var(--text-muted); }
+
+/* 裁决摘要条（概览结论优先）：大比分 + 一句裁决 + 取证动作 */
+.verdict-strip {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center;
+  padding: 20px 22px; border: 1px solid var(--border);
+  border-left: 3px solid var(--wb-verdict-accent);
+  background: var(--bg-panel); border-radius: var(--radius);
+}
+.verdict-strip .vs-score { display: flex; align-items: baseline; gap: 8px; }
+.verdict-strip .vs-num { font-size: var(--f-display-lg); font-weight: 800; line-height: var(--lh-display-lg); font-variant-numeric: tabular-nums; }
+.verdict-strip .vs-colon { color: var(--text-muted); font-size: 22px; }
+.verdict-strip .vs-body { min-width: 0; }
+.verdict-strip .vs-title { font-size: var(--f-title); font-weight: 700; }
+.verdict-strip .vs-desc { color: var(--text-secondary); font-size: var(--f-sub); margin-top: 4px; }
+.verdict-strip .vs-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* 回合证据（概览证据时间线）：真值 /rounds，每回合 side/kills/grenades；winner 为 null 不虚构 */
+.round-evidence { margin-top: 14px; }
+.round-evidence .re-track { display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px; min-width: 0; padding: 2px 2px 6px; }
+.round-evidence .re-round {
+  flex: 1 1 62px; min-width: 62px; max-width: 92px; display: flex; flex-direction: column; gap: 5px;
+  padding: 8px 8px 7px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-elevated); min-height: 64px; justify-content: space-between;
+}
+.round-evidence .re-round.is-highlight { border-color: var(--accent); background: var(--accent-soft); }
+.round-evidence .re-no { font-size: 11px; color: var(--text-muted); font-weight: 700; letter-spacing: .04em; }
+.round-evidence .re-kills { font-size: 17px; font-weight: 800; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.round-evidence .re-kills small { font-size: 10.5px; color: var(--text-muted); font-weight: 500; margin-left: 2px; }
+.round-evidence .re-bar { height: 3px; border-radius: 2px; background: var(--border); overflow: hidden; }
+.round-evidence .re-bar > i { display: block; height: 100%; background: var(--accent); border-radius: 2px; }
+.round-evidence .re-side { font-size: 10.5px; color: var(--text-secondary); display: flex; gap: 5px; align-items: center; }
+.round-evidence .re-side .tag { font-size: 10px; padding: 0 5px; }
+.round-evidence .re-winning { font-size: 10px; font-weight: 700; color: var(--ok); }
+.round-evidence .re-note { margin-top: 8px; font-size: 12px; color: var(--text-muted); }
+
+/* 战术时间线（团队协作/区域控制切换）：segment 化 tab，不用独立大卡 */
+.wb-timeline-switch { display: flex; gap: 6px; margin: 4px 0 14px; }
+
+/* 证据密度小注/口径行 */
+.wb-evidence-note { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.wb-empty-note { font-size: 13px; color: var(--text-secondary); padding: 14px 2px; }
+
+/* 诚实标注（缺字段/零机会/低覆盖/低置信）：统一使用语义色 */
+.wb-honest { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; }
+.wb-honest.low { color: var(--warn); }
+.wb-honest.muted { color: var(--text-muted); }
+.wb-honest .hs-dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
+.wb-honest.low .hs-dot { background: var(--warn); }
+.wb-honest.muted .hs-dot { background: var(--text-muted); }
+
+/* 可追溯训练单（个人复盘）：Rating Pro 主结论 + 基础指标带 + 机会归一 */
+.train-strip { display: flex; flex-wrap: wrap; gap: 0; border-top: 1px solid var(--border); padding-top: 12px; }
+.train-strip .metric { padding: 0 18px 0 0; margin-right: 18px; border-right: 1px solid var(--border); }
+.train-strip .metric:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+
+/* 响应式：上下文条与裁决摘要自然纵向层级，不压缩成不可读双栏 */
+@media (max-width: 720px) {
+  .wb-context { grid-template-columns: 1fr; padding: 14px 16px; }
+  .wb-context .wb-status { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+  .wb-context .wb-side-actions { justify-content: flex-start; }
+  .verdict-strip { grid-template-columns: 1fr; gap: 12px; }
+  .verdict-strip .vs-actions { justify-content: flex-start; }
+  .train-strip .metric { padding-right: 10px; margin-right: 10px; }
+}
+
+/* ============================= 身份/权益状态条（Dashboard/页首） ============================= */
+.status-strip {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+  padding: 10px 14px; margin-bottom: 18px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--app-surface);
+}
+.status-strip .ss-item { display: inline-flex; align-items: center; gap: 7px; min-width: 0; }
+.status-strip .ss-k { color: var(--text-muted); font-size: 12px; }
+.status-strip .ss-v { color: var(--text-secondary); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.status-strip .ss-sep { width: 1px; height: 18px; background: var(--border); }
+.identity-pill { display: inline-flex; align-items: center; gap: 6px; }
+.identity-pill .dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.idp-bound .dot { background: var(--ok); }
+.idp-unbound .dot { background: var(--text-muted); }
+.idp-warn .dot { background: var(--warn); }
+
+/* 空态增强 */
+.empty-state .empty-icon { font-size: 30px; opacity: .8; margin-bottom: 6px; }
+.empty-state .empty-main { font-weight: 700; color: var(--text-primary); }
+.empty-state .empty-sub { color: var(--text-muted); font-size: 13px; margin-top: 6px; }
+
+/* 加载骨架（壳层统一） */
+.skeleton { position: relative; overflow: hidden; }
+.skeleton::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.03), transparent); transform: translateX(-100%); animation: sk-shimmer 1.3s infinite; }
+@keyframes sk-shimmer { to { transform: translateX(100%); } }
+
+/* ============================= 响应式：壳层 ============================= */
+@media (max-width: 768px) {
+  /* 移动端壳层改为纵向：导航条在流动布局里置顶（非 fixed，不遮挡正文） */
+  .app-body { flex-direction: column; }
+  .app-side { display: none; }
+  .app-nav-strip {
+    display: flex; flex-wrap: wrap; gap: 6px; align-self: stretch;
+    padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--app-surface);
+  }
+  .app-nav-strip .app-nav-link { padding: 7px 12px; min-height: 40px; font-size: 13px; border: 1px solid transparent; }
+  .app-nav-strip .app-nav-link.active { border-color: var(--accent); }
+  .app-topbar { padding: 0 14px; gap: 12px; min-width: 0; }
+  .app-crumb { display: none; }               /* 移动端隐藏面包屑，保留标题 */
+  .app-uname { max-width: 96px; }
+  .app-user .app-avatar { width: 30px; height: 30px; }
+  .app-user { min-width: 0; }
+}
+/* 极窄：隐藏昵称文字（档位徽标仍是身份主信号），避免顶栏横向溢出 */
+@media (max-width: 400px) {
+  .app-uname { display: none; }
+  .app-user { gap: 6px; }
+  .app-topbar { gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after { animation: none; }
+}

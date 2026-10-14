@@ -1,0 +1,267 @@
+{
+  "demo_id": 19,
+  "map": "de_mirage",
+  "tick_rate": 64.0,
+  "rounds": [
+    {
+      "round": 1,
+      "start_tick": 3896,
+      "end_tick": 9077,
+      "freeze_end_tick": 5592
+    },
+    {
+      "round": 2,
+      "start_tick": 9397,
+      "end_tick": 14576,
+      "freeze_end_tick": 10677
+    },
+    {
+      "round": 3,
+      "start_tick": 14896,
+      "end_tick": 20139,
+      "freeze_end_tick": 16176
+    },
+    {
+      "round": 4,
+      "start_tick": 20459,
+      "end_tick": 27937,
+      "freeze_end_tick": 21739
+    },
+    {
+      "round": 5,
+      "start_tick": 28257,
+      "end_tick": 36428,
+      "freeze_end_tick": 29537
+    },
+    {
+      "round": 6,
+      "start_tick": 36748,
+      "end_tick": 41683,
+      "freeze_end_tick": 38028
+    },
+    {
+      "round": 7,
+      "start_tick": 42003,
+      "end_tick": 49919,
+      "freeze_end_tick": 43283
+    },
+    {
+      "round": 8,
+      "start_tick": 50239,
+      "end_tick": 56913,
+      "freeze_end_tick": 51519
+    },
+    {
+      "round": 9,
+      "start_tick": 57233,
+      "end_tick": 64995,
+      "freeze_end_tick": 61140
+    },
+    {
+      "round": 10,
+      "start_tick": 65315,
+      "end_tick": 68507,
+      "freeze_end_tick": 66595
+    },
+    {
+      "round": 11,
+      "start_tick": 68827,
+      "end_tick": 76313,
+      "freeze_end_tick": 70107
+    },
+    {
+      "round": 12,
+      "start_tick": 76633,
+      "end_tick": 81260,
+      "freeze_end_tick": 77913
+    },
+    {
+      "round": 13,
+      "start_tick": 84748,
+      "end_tick": 89382,
+      "freeze_end_tick": 86444
+    },
+    {
+      "round": 14,
+      "start_tick": 89702,
+      "end_tick": 92917,
+      "freeze_end_tick": 90982
+    },
+    {
+      "round": 15,
+      "start_tick": 93237,
+      "end_tick": 98460,
+      "freeze_end_tick": 94517
+    },
+    {
+      "round": 16,
+      "start_tick": 98780,
+      "end_tick": 103830,
+      "freeze_end_tick": 100060
+    },
+    {
+      "round": 17,
+      "start_tick": 104150,
+      "end_tick": 109152,
+      "freeze_end_tick": 105430
+    },
+    {
+      "round": 18,
+      "start_tick": 109472,
+      "end_tick": 115247,
+      "freeze_end_tick": 110752
+    },
+    {
+      "round": 19,
+      "start_tick": 115567,
+      "end_tick": 122649,
+      "freeze_end_tick": 116847
+    }
+  ],
+  "round1": {
+    "round": 1,
+    "start_tick": 3896,
+    "freeze_end_tick": 5592,
+    "end_tick": 9077,
+    "winner_team": "B"
+  },
+  "early_kills": [
+    {
+      "tick": 904,
+      "weapon": "ak47"
+    },
+    {
+      "tick": 2150,
+      "weapon": "ak47"
+    },
+    {
+      "tick": 2165,
+      "weapon": "ak47"
+    },
+    {
+      "tick": 2289,
+      "weapon": "knife_t"
+    },
+    {
+      "tick": 2295,
+      "weapon": "ak47"
+    },
+    {
+      "tick": 2422,
+      "weapon": "ak47"
+    },
+    {
+      "tick": 2471,
+      "weapon": "ak47"
+    },
+    {
+      "tick": 2587,
+      "weapon": "deagle"
+    },
+    {
+      "tick": 2630,
+      "weapon": "deagle"
+    },
+    {
+      "tick": 2674,
+      "weapon": "deagle"
+    },
+    {
+      "tick": 2758,
+      "weapon": "deagle"
+    },
+    {
+      "tick": 2817,
+      "weapon": "usp_silencer"
+    },
+    {
+      "tick": 3430,
+      "weapon": "m4a1"
+    }
+  ],
+  "round1_kills": [
+    {
+      "tick": 6321,
+      "weapon": "usp_silencer"
+    },
+    {
+      "tick": 7872,
+      "weapon": "glock"
+    },
+    {
+      "tick": 8121,
+      "weapon": "usp_silencer"
+    },
+    {
+      "tick": 8316,
+      "weapon": "p250"
+    },
+    {
+      "tick": 8319,
+      "weapon": "glock"
+    },
+    {
+      "tick": 8782,
+      "weapon": "glock"
+    },
+    {
+      "tick": 9077,
+      "weapon": "p250"
+    }
+  ],
+  "old_attribution_of_early": [
+    {
+      "tick": 904,
+      "old_round": 1
+    },
+    {
+      "tick": 2150,
+      "old_round": 1
+    },
+    {
+      "tick": 2165,
+      "old_round": 1
+    },
+    {
+      "tick": 2289,
+      "old_round": 1
+    },
+    {
+      "tick": 2295,
+      "old_round": 1
+    },
+    {
+      "tick": 2422,
+      "old_round": 1
+    },
+    {
+      "tick": 2471,
+      "old_round": 1
+    },
+    {
+      "tick": 2587,
+      "old_round": 1
+    },
+    {
+      "tick": 2630,
+      "old_round": 1
+    },
+    {
+      "tick": 2674,
+      "old_round": 1
+    },
+    {
+      "tick": 2758,
+      "old_round": 1
+    },
+    {
+      "tick": 2817,
+      "old_round": 1
+    },
+    {
+      "tick": 3430,
+      "old_round": 1
+    }
+  ],
+  "note": "真实 demo 19 首回合边界样本；early_kills 为备战期击杀（不得归属任何正式回合）"
+}

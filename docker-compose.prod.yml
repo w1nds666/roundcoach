@@ -1,0 +1,51 @@
+# 生产 Overlay（与 docker-compose.yml 叠加使用）：
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# 6R19B 生产硬化：
+#   - ENV=production：后端启动守卫强制（拒默认 DB/MinIO/JWT、仅 HTTPS 回调、禁 fake verifier、禁 docs/openapi）。
+#   - 不发布任何宿主端口到 0.0.0.0/::（nginx/MinIO 均 !reset；由外部 LB/TLS 终结入口，MinIO 仅内部网络）。
+#   - backend/worker 代码用镜像内只读版本（!reset 宿主 rw 代码挂载），且由 Dockerfile USER 以非 root 运行。
+#   - 凭据由 secrets 注入（base 已用 ${VAR:?} 必填）；未提供真实 secrets/域名/TLS/证书前，后端 ENV=production
+#     守卫会拒绝启动（fail-closed）→ 结论 NO-GO（不虚构域名/证书）。
+services:
+  nginx:
+    ports: !reset []
+    # 生产入口由外部 LB/TLS 终结；此处不再发布宿主端口。TLS/HSTS/域名/证书为用户外部输入。
+
+  backend:
+    environment:
+      ENV: production
+      STEAM_OPENID_REQUIRE_HTTPS: "true"
+      DATABASE_URL: ${DATABASE_URL:?生产必须由 secrets 注入 DATABASE_URL}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:?生产必须由 secrets 注入 MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:?生产必须由 secrets 注入 MINIO_SECRET_KEY}
+      RATE_LIMIT_TRUSTED_PROXIES: ${RATE_LIMIT_TRUSTED_PROXIES:?生产必须配置可信代理 IP/CIDR（非空且合法）}
+    # 代码用镜像内只读版本（不挂载宿主 rw 代码），由镜像非 root USER 运行
+    volumes: !reset []
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  worker:
+    environment:
+      ENV: production
+      STEAM_OPENID_REQUIRE_HTTPS: "true"
+      DATABASE_URL: ${DATABASE_URL:?生产必须由 secrets 注入 DATABASE_URL}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:?生产必须由 secrets 注入 MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:?生产必须由 secrets 注入 MINIO_SECRET_KEY}
+      RATE_LIMIT_TRUSTED_PROXIES: ${RATE_LIMIT_TRUSTED_PROXIES:?生产必须配置可信代理 IP/CIDR（非空且合法）}
+    volumes: !reset []
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  minio:
+    ports: !reset []
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?生产必须由 secrets 注入 MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?生产必须由 secrets 注入 MINIO_ROOT_PASSWORD}
+    # MinIO 仅内部网络（不发布宿主端口）
+
+  minio-init:
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?生产必须由 secrets 注入 MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?生产必须由 secrets 注入 MINIO_ROOT_PASSWORD}

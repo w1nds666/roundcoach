@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- 6R21E：用官方 ValveResourceFormat 19.2.6339 库只读解析 CS2 NavMesh v36 并导出结构 JSON -->
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+  <!-- 锁官方 NuGet 精确版本（勿升级） -->
+  <ItemGroup>
+    <PackageReference Include="ValveResourceFormat" Version="19.2.6339" />
+  </ItemGroup>
+</Project>
